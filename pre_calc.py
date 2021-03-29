@@ -1,17 +1,19 @@
 import argparse
-import json
 import glob
+import json
+from lxml import etree
+from lxml.etree import XMLParser
+from openpyxl import load_workbook
 import os
 import progressbar
 import requests
-from openpyxl import load_workbook
 
 
 refresh_date = "2021-03-15"
-
-
-validator_url = "http://stage.iativalidator.iatistandard.org/api/v1/stats?date=2020-12-31"
+validator_url = "http://stage.iativalidator.iatistandard.org/api/v1/stats?date={}".format(refresh_date)
 all_validation = json.loads(requests.get(validator_url).content)
+large_parser = XMLParser(huge_tree=True)
+parser = etree.XMLParser(remove_blank_text=True)
 wb = load_workbook(filename = 'template.xlsx')
 sheet = wb['Sheet1']
 
@@ -32,10 +34,19 @@ if __name__ == "__main__":
     
     sheet['B8'] = critical_errors
 
+    number_of_activities = 0
+
     xml_path = os.path.join("/home/alex/git/IATI-Registry-Refresher/data", args.publisher, '*')
     xml_files = glob.glob(xml_path)
-    # bar = progressbar.ProgressBar()
-    # for xml_file in bar(xml_files):
+    bar = progressbar.ProgressBar()
+    for xml_file in bar(xml_files):
+        print(xml_file)
+        tree = etree.parse(xml_file, parser=large_parser)
+        root = tree.getroot()
+        activities = root.xpath("iati-activity")
+        number_of_activities += len(activities)
+    
+    sheet['B5'] = number_of_activities
 
     outfile = os.path.join(output_dir, "publisher.xlsx")
     wb.save(outfile)
