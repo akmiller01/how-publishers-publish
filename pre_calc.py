@@ -138,7 +138,21 @@ if __name__ == "__main__":
         ("Number of budgets in 2023", "H101", "iati-activity/budget[period-start[starts-with(@iso-date, '2023')]]", "len"),
         ("Number of activities that contain budgets", "B102", "iati-activity[budget]", "len"),
         ("Percentage of activities that contain budgets", "B103", "round((indicator_values['Number of activities that contain budgets'] / indicator_values['Number of activities']) * 100, 2)", "eval"),
-        
+        ("Budgets with start dates beyond 2024", "B104", "iati-activity/budget[period-start[number(translate(@iso-date, '-', '')) > 20231231]]", "len"),
+        ("Number of activities with only original budgets", "B105", "iati-activity[budget[@type='1'] and not(budget[@type='2'])]", "len"),
+        ("Number of activities with only revised budgets", "B106", "iati-activity[budget[@type='2'] and not(budget[@type='1'])]", "len"),
+        ("Number of activities with original and revised budgets", "B107", "iati-activity[budget[@type='1'] and budget[@type='2']]", "len"),
+
+        ("Number of planned-disbursements", "B110", "iati-activity/planned-disbursement", "len"),
+        ("Number of planned-disbursements in 2018", "C110", "iati-activity/planned-disbursement[period-start[starts-with(@iso-date, '2018')]]", "len"),
+        ("Number of planned-disbursements in 2019", "D110", "iati-activity/planned-disbursement[period-start[starts-with(@iso-date, '2019')]]", "len"),
+        ("Number of planned-disbursements in 2020", "E110", "iati-activity/planned-disbursement[period-start[starts-with(@iso-date, '2020')]]", "len"),
+        ("Number of planned-disbursements in 2021", "F110", "iati-activity/planned-disbursement[period-start[starts-with(@iso-date, '2021')]]", "len"),
+        ("Number of planned-disbursements in 2022", "G110", "iati-activity/planned-disbursement[period-start[starts-with(@iso-date, '2022')]]", "len"),
+        ("Number of planned-disbursements in 2023", "H110", "iati-activity/planned-disbursement[period-start[starts-with(@iso-date, '2023')]]", "len"),
+        ("Number of activities that contain planned-disbursements", "B111", "iati-activity[planned-disbursement]", "len"),
+        ("Percentage of activities that contain planned-disbursements", "B112", "round((indicator_values['Number of activities that contain planned-disbursements'] / indicator_values['Number of activities']) * 100, 2)", "eval"),
+        ("Planned-disbursements with start dates beyond 2024", "B113", "iati-activity/planned-disbursement[period-start[number(translate(@iso-date, '-', '')) > 20231231]]", "len"),
     ]
 
     indicator_values = dict()
