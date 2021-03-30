@@ -9,7 +9,7 @@ import progressbar
 import requests
 
 
-refresh_date = "2021-03-15"
+refresh_date = "2021-03-29"
 validator_url = "http://stage.iativalidator.iatistandard.org/api/v1/stats?date={}".format(refresh_date)
 all_validation = json.loads(requests.get(validator_url).content)
 large_parser = XMLParser(huge_tree=True)
@@ -34,7 +34,14 @@ if __name__ == "__main__":
     
     sheet['B8'] = critical_errors
 
-    number_of_activities = 0
+    indicators = [
+        # (Name, excel location, xpath, function),
+        ("Number of activities", "B5", "iati-activity", "len"),
+        ("Number of activities with financials", "B6", "iati-activity[transaction|budget|planned-disbursement]", "len"),
+        ("Number of activities with financials 2018", "C6", "iati-activity[transaction[transaction-date[starts-with(@iso-date, '2018')]]|budget[period-start[starts-with(@iso-date, '2018')]]|planned-disbursement[period-start[starts-with(@iso-date, '2018')]]]", "len")
+    ]
+
+    indicator_values = dict()
 
     xml_path = os.path.join("/home/alex/git/IATI-Registry-Refresher/data", args.publisher, '*')
     xml_files = glob.glob(xml_path)
@@ -43,10 +50,22 @@ if __name__ == "__main__":
         print(xml_file)
         tree = etree.parse(xml_file, parser=large_parser)
         root = tree.getroot()
-        activities = root.xpath("iati-activity")
-        number_of_activities += len(activities)
-    
-    sheet['B5'] = number_of_activities
+        
+        for indicator_name, indicator_location, indicator_xpath, indicator_function in indicators:
+            if indicator_function == "len":
+                evaluated_value = len(root.xpath(indicator_xpath))
+            else:
+                evaluated_value = []
+            if indicator_name not in indicator_values.keys():
+                indicator_values[indicator_name] = evaluated_value
+            else:
+                indicator_values[indicator_name] += evaluated_value
+
+    for indicator_name, indicator_location, indicator_xpath, indicator_function in indicators:
+        accumulated_value = indicator_values[indicator_name]
+        if type(accumulated_value) is list:
+            accumulated_value = ", ".join(accumulated_value)
+        sheet[indicator_location] = accumulated_value
 
     outfile = os.path.join(output_dir, "publisher.xlsx")
     wb.save(outfile)
