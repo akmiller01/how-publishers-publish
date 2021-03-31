@@ -153,6 +153,21 @@ if __name__ == "__main__":
         ("Number of activities that contain planned-disbursements", "B111", "iati-activity[planned-disbursement]", "len"),
         ("Percentage of activities that contain planned-disbursements", "B112", "round((indicator_values['Number of activities that contain planned-disbursements'] / indicator_values['Number of activities']) * 100, 2)", "eval"),
         ("Planned-disbursements with start dates beyond 2024", "B113", "iati-activity/planned-disbursement[period-start[number(translate(@iso-date, '-', '')) > 20231231]]", "len"),
+
+        ("Number of activities with recipient country or recipient region", "B120", "iati-activity[recipient-country|recipient-region]", "len"),
+        ("Number of activities with recipient country", "B121", "iati-activity[recipient-country]", "len"),
+        ("Number of activities with recipient region", "B122", "iati-activity[recipient-region]", "len"),
+        ("Number of activities with recipient country and recipient region", "B123", "iati-activity[recipient-country and recipient-region]", "len"),
+        ("Number of transactions in activities with recipient country or recipient region", "B124", "iati-activity[recipient-country|recipient-region]/transaction", "len"),
+        ("Number of transactions with recipient country", "B125", "iati-activity/transaction[recipient-country]", "len"),
+        ("Number of transactions with recipient region", "B126", "iati-activity/transaction[recipient-region]", "len"),
+        ("Number of activities with transactions that have recipient country and recipient region", "B127", "iati-activity[transaction[recipient-country|recipient-region]]", "len"),
+
+        ("Number of activities that include administrative or point", "B130", "iati-activity[location[administrative|point]]", "len"),
+        ("Percentage of activities that include administrative or point", "B131", "round((indicator_values['Number of activities that include administrative or point'] / indicator_values['Number of activities']) * 100, 2)", "eval"),
+        ("Number of activities that include administrative", "B132", "iati-activity[location[administrative]]", "len"),
+        ("Which administrative vocabularies are used", "B133", "iati-activity/location/administrative/@vocabulary", "unique"),
+
     ]
 
     indicator_values = dict()
@@ -167,6 +182,8 @@ if __name__ == "__main__":
         for indicator_name, indicator_location, indicator_xpath, indicator_function in indicators:
             if indicator_function == "len":
                 evaluated_value = len(root.xpath(indicator_xpath))
+            elif indicator_function == "unique":
+                evaluated_value = list(set(root.xpath(indicator_xpath)))
             else:
                 evaluated_value = []
             if indicator_name not in indicator_values.keys():
@@ -177,6 +194,8 @@ if __name__ == "__main__":
     for indicator_name, indicator_location, indicator_xpath, indicator_function in indicators:
         if indicator_function == "eval":
             indicator_values[indicator_name] = eval(indicator_xpath)
+        elif indicator_function == "unique":
+            indicator_values[indicator_name] = list(set(indicator_values[indicator_name]))
         accumulated_value = indicator_values[indicator_name]
         if type(accumulated_value) is list:
             accumulated_value = ", ".join(accumulated_value)
