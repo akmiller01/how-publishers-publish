@@ -197,6 +197,27 @@ if __name__ == "__main__":
         ("Number of activities with humanitarian scope", "B165", "iati-activity[humanitarian-scope]", "len"),
         ("Which humanitarian-scope types are being used", "B166", "iati-activity/humanitarian-scope/@type", "unique"),
         ("Which humanitarian-scope vocabularies are being used", "B167", "iati-activity/humanitarian-scope/@vocabulary", "unique"),
+
+        ("Number of activities including default finance type", "B171", "iati-activity[default-finance-type]", "len"),
+        ("Percentage of activities including default finance type", "B172", "round((indicator_values['Number of activities including default finance type'] / indicator_values['Number of activities']) * 100, 2)", "eval"),
+        ("Number of transactions including finance type", "B173", "iati-activity/transaction[finance-type]", "len"),
+        ("Percentage of transactions including finance type", "B174", "round((indicator_values['Number of transactions including finance type'] / indicator_values['Number of transactions']) * 100, 2)", "eval"),
+        ("Which transaction types have finance-type", "B175", "iati-activity/transaction[finance-type]/transaction-type/@code", "unique"),
+        ("Which default finance type is being used", "B176", "iati-activity/default-finance-type/@code", "unique"),
+        ("Number of activities including default flow type", "B178", "iati-activity[default-flow-type]", "len"),
+        ("Percentage of activities including default flow type", "B179", "round((indicator_values['Number of activities including default flow type'] / indicator_values['Number of activities']) * 100, 2)", "eval"),
+        ("Number of transactions including flow type", "B180", "iati-activity/transaction[flow-type]", "len"),
+        ("Percentage of transactions including flow type", "B181", "round((indicator_values['Number of transactions including flow type'] / indicator_values['Number of transactions']) * 100, 2)", "eval"),
+        ("Which transaction types have flow-type", "B182", "iati-activity/transaction[flow-type]/transaction-type/@code", "unique"),
+        ("Which default flow type is being used", "B183", "iati-activity/default-flow-type/@code", "unique"),
+
+        ("Number of activities including default aid type", "B187", "iati-activity[default-aid-type]", "len"),
+        ("Percentage of activities including default aid type", "B188", "round((indicator_values['Number of activities including default aid type'] / indicator_values['Number of activities']) * 100, 2)", "eval"),
+        ("Number of transactions including aid type", "B189", "iati-activity/transaction[aid-type]", "len"),
+        ("Percentage of transactions including aid type", "B190", "round((indicator_values['Number of transactions including aid type'] / indicator_values['Number of transactions']) * 100, 2)", "eval"),
+        ("Which transaction types have aid-type", "B191", "iati-activity/transaction[aid-type]/transaction-type/@code", "unique"),
+        ("Which default aid type vocabularies are being used", "B192", "iati-activity/default-aid-type/@vocabulary", "unique"),
+        ("Which aid type vocabularies are being used", "B193", "iati-activity/transaction/aid-type/@vocabulary", "unique"),
     ]
 
     indicator_values = dict()
