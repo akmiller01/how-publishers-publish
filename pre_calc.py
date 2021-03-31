@@ -175,6 +175,13 @@ if __name__ == "__main__":
         ("Number of activities including sector vocabulary 2", "B141", "iati-activity[sector[@vocabulary='2']]", "len"),
         ("Percentage of activities including sector vocabulary 2", "B142", "round((indicator_values['Number of activities including sector vocabulary 2'] / indicator_values['Number of activities']) * 100, 2)", "eval"),
         ("Number of activities including sector vocabulary 1 and sector vocabulary 2", "B143", "iati-activity[sector[@vocabulary='1'] and sector[@vocabulary='2']]", "len"),
+        ("Number of transactions with sector", "B144", "iati-activity/transaction[sector]", "len"),
+        ("Which vocabularies are used in transaction sector", "B145", "iati-activity/transaction/sector/@vocabulary", "unique"),
+        ("Number of transactions including sector vocabulary 1", "B146", "iati-activity/transaction[sector[@vocabulary='1' or not(@vocabulary)]]", "len"),
+        ("Percentage of transactions including sector vocabulary 1", "B147", "round((indicator_values['Number of transactions including sector vocabulary 1'] / indicator_values['Number of transactions']) * 100, 2)", "eval"),
+        ("Number of transactions including sector vocabulary 2", "B148", "iati-activity/transaction[sector[@vocabulary='2']]", "len"),
+        ("Percentage of transactions including sector vocabulary 2", "B149", "round((indicator_values['Number of transactions including sector vocabulary 2'] / indicator_values['Number of transactions']) * 100, 2)", "eval"),
+        ("Number of transactions including sector vocabulary 1 and sector vocabulary 2", "B150", "iati-activity/transaction[sector[@vocabulary='1'] and sector[@vocabulary='2']]", "len"),
 
     ]
 
