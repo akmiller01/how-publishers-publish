@@ -163,10 +163,11 @@ if __name__ == "__main__":
         ("Number of transactions with recipient region", "B126", "iati-activity/transaction[recipient-region]", "len"),
         ("Number of activities with transactions that have recipient country and recipient region", "B127", "iati-activity[transaction[recipient-country|recipient-region]]", "len"),
 
-        ("Number of activities that include administrative or point", "B130", "iati-activity[location[administrative|point]]", "len"),
+        ("Number of activities that include administrative or point", "B130", "iati-activity[location[administrative|point[pos]]]", "len"),
         ("Percentage of activities that include administrative or point", "B131", "round((indicator_values['Number of activities that include administrative or point'] / indicator_values['Number of activities']) * 100, 2)", "eval"),
         ("Number of activities that include administrative", "B132", "iati-activity[location[administrative]]", "len"),
         ("Which administrative vocabularies are used", "B133", "iati-activity/location/administrative/@vocabulary", "unique"),
+        ("Number of activities that include point", "B134", "iati-activity[location[point[pos]]]", "len"),
 
         ("Numbers of activities with sector", "B137", "iati-activity[sector]", "len"),
         ("Which vocabularies are used in activity sector", "B138", "iati-activity/sector/@vocabulary", "unique"),
@@ -183,6 +184,19 @@ if __name__ == "__main__":
         ("Percentage of transactions including sector vocabulary 2", "B149", "round((indicator_values['Number of transactions including sector vocabulary 2'] / indicator_values['Number of transactions']) * 100, 2)", "eval"),
         ("Number of transactions including sector vocabulary 1 and sector vocabulary 2", "B150", "iati-activity/transaction[sector[@vocabulary='1'] and sector[@vocabulary='2']]", "len"),
 
+        ("Number of activities with any SDG information", "B153", "iati-activity[sector[@vocabulary='7' or @vocabulary='8' or @vocabulary='9'] | transaction[sector[@vocabulary='7' or @vocabulary='8' or @vocabulary='9']] | tag[@vocabulary='2' or @vocabulary='3'] | result[indicator[reference[@vocabulary='9']]]]", "len"),
+        ("Number of activities with SDG tag", "B154", "iati-activity[tag[@vocabulary='2' or @vocabulary='3']]", "len"),
+        ("Number of activities with SDG sector", "B155", "iati-activity[sector[@vocabulary='7' or @vocabulary='8' or @vocabulary='9'] | transaction[sector[@vocabulary='7' or @vocabulary='8' or @vocabulary='9']]]", "len"),
+        ("Number of activities with SDG result indicator", "B156", "iati-activity[result[indicator[reference[@vocabulary='9']]]]", "len"),
+        ("Number of activities with policy marker", "B157", "iati-activity[policy-marker]", "len"),
+        ("Which policy marker codes are being used", "B158", "iati-activity/policy-marker/@code", "unique"),
+
+        ("Number of activities with humanitarian flag", "B162", "iati-activity[@humanitarian='1' or @humanitarian='true']", "len"),
+        ("Percentage of activities with humanitarian flag", "B163", "round((indicator_values['Number of activities with humanitarian flag'] / indicator_values['Number of activities']) * 100, 2)", "eval"),
+        ("Number of transactions with humanitarian flag", "B164", "iati-activity/transaction[@humanitarian='1' or @humanitarian='true']", "len"),
+        ("Number of activities with humanitarian scope", "B165", "iati-activity[humanitarian-scope]", "len"),
+        ("Which humanitarian-scope types are being used", "B166", "iati-activity/humanitarian-scope/@type", "unique"),
+        ("Which humanitarian-scope vocabularies are being used", "B167", "iati-activity/humanitarian-scope/@vocabulary", "unique"),
     ]
 
     indicator_values = dict()
