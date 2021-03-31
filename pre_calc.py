@@ -168,6 +168,14 @@ if __name__ == "__main__":
         ("Number of activities that include administrative", "B132", "iati-activity[location[administrative]]", "len"),
         ("Which administrative vocabularies are used", "B133", "iati-activity/location/administrative/@vocabulary", "unique"),
 
+        ("Numbers of activities with sector", "B137", "iati-activity[sector]", "len"),
+        ("Which vocabularies are used in activity sector", "B138", "iati-activity/sector/@vocabulary", "unique"),
+        ("Number of activities including sector vocabulary 1", "B139", "iati-activity[sector[@vocabulary='1' or not(@vocabulary)]]", "len"),
+        ("Percentage of activities including sector vocabulary 1", "B140", "round((indicator_values['Number of activities including sector vocabulary 1'] / indicator_values['Number of activities']) * 100, 2)", "eval"),
+        ("Number of activities including sector vocabulary 2", "B141", "iati-activity[sector[@vocabulary='2']]", "len"),
+        ("Percentage of activities including sector vocabulary 2", "B142", "round((indicator_values['Number of activities including sector vocabulary 2'] / indicator_values['Number of activities']) * 100, 2)", "eval"),
+        ("Number of activities including sector vocabulary 1 and sector vocabulary 2", "B143", "iati-activity[sector[@vocabulary='1'] and sector[@vocabulary='2']]", "len"),
+
     ]
 
     indicator_values = dict()
@@ -176,7 +184,10 @@ if __name__ == "__main__":
     xml_files = glob.glob(xml_path)
     bar = progressbar.ProgressBar()
     for xml_file in bar(xml_files):
-        tree = etree.parse(xml_file, parser=large_parser)
+        try:
+            tree = etree.parse(xml_file, parser=large_parser)
+        except etree.XMLSyntaxError:
+            continue
         root = tree.getroot()
         
         for indicator_name, indicator_location, indicator_xpath, indicator_function in indicators:
