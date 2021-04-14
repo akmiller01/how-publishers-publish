@@ -265,18 +265,19 @@ if __name__ == "__main__":
                 indicator_values[indicator_name] += evaluated_value
         destroy_tree(tree)
 
-    for indicator_name, indicator_location, indicator_xpath, indicator_function in indicators:
-        if indicator_function == "eval":
-            try:
-                indicator_values[indicator_name] = eval(indicator_xpath)
-            except ZeroDivisionError:
-                indicator_values[indicator_name] = 0
-        elif indicator_function == "unique":
-            indicator_values[indicator_name] = list(set(indicator_values[indicator_name]))
-        accumulated_value = indicator_values[indicator_name]
-        if type(accumulated_value) is list:
-            accumulated_value = ", ".join(accumulated_value)
-        sheet[indicator_location] = accumulated_value
+    if len(indicator_values.keys()) > 0:
+        for indicator_name, indicator_location, indicator_xpath, indicator_function in indicators:
+            if indicator_function == "eval":
+                try:
+                    indicator_values[indicator_name] = eval(indicator_xpath)
+                except ZeroDivisionError:
+                    indicator_values[indicator_name] = 0
+            elif indicator_function == "unique":
+                indicator_values[indicator_name] = list(set(indicator_values[indicator_name]))
+            accumulated_value = indicator_values[indicator_name]
+            if type(accumulated_value) is list:
+                accumulated_value = ", ".join(accumulated_value)
+            sheet[indicator_location] = accumulated_value
 
     outfile = os.path.join(output_dir, "publisher.xlsx")
     wb.save(outfile)
