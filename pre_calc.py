@@ -267,7 +267,10 @@ if __name__ == "__main__":
 
     for indicator_name, indicator_location, indicator_xpath, indicator_function in indicators:
         if indicator_function == "eval":
-            indicator_values[indicator_name] = eval(indicator_xpath)
+            try:
+                indicator_values[indicator_name] = eval(indicator_xpath)
+            except ZeroDivisionError:
+                indicator_values[indicator_name] = 0
         elif indicator_function == "unique":
             indicator_values[indicator_name] = list(set(indicator_values[indicator_name]))
         accumulated_value = indicator_values[indicator_name]
