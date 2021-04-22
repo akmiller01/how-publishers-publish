@@ -42,7 +42,7 @@ if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser(description='Create publisher metadata')
     arg_parser.add_argument('publisher', type=str, help='Publisher\'s ID from the IATI Registry')
     args = arg_parser.parse_args()
-    output_dir = os.path.join("output", args.publisher)
+    output_dir = os.path.join("un_output", args.publisher)
     if not os.path.isdir(output_dir):
         os.makedirs(output_dir)
 
@@ -251,7 +251,7 @@ if __name__ == "__main__":
         except etree.XMLSyntaxError:
             continue
         root = tree.getroot()
-        
+
         for indicator_name, indicator_location, indicator_xpath, indicator_function in indicators:
             if indicator_function == "len":
                 evaluated_value = len(root.xpath(indicator_xpath))
@@ -281,4 +281,4 @@ if __name__ == "__main__":
 
     outfile = os.path.join(output_dir, "publisher.xlsx")
     wb.save(outfile)
-        
+

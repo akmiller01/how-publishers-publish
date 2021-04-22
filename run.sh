@@ -11,4 +11,4 @@ fi
 while read pub; do
   echo $pub && \
   python3 pre_calc.py $pub;
-done < publishers.txt
+done < un_publishers.txt
