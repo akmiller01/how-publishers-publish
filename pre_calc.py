@@ -29,7 +29,7 @@ def destroy_tree(tree):
     del tree
 
 
-refresh_date = "2021-03-29"
+refresh_date = "2021-04-19"
 validator_url = "http://stage.iativalidator.iatistandard.org/api/v1/stats?date={}".format(refresh_date)
 all_validation = json.loads(requests.get(validator_url).content)
 large_parser = XMLParser(huge_tree=True)
