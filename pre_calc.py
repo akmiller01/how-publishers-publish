@@ -268,8 +268,8 @@ if __name__ == "__main__":
         ("Number of transactions including aid type", "B193", "iati-activity/transaction[aid-type]", "len"),
         ("Percentage of transactions including aid type", "B194", "round((indicator_values['Number of transactions including aid type'] / indicator_values['Number of transactions']) * 100, 2)", "eval"),
         ("Which transaction types have aid-type", "B195", "iati-activity/transaction[aid-type]/transaction-type/@code", "unique"),
-        ("Which default aid type vocabularies are being used", "B196", "iati-activity/default-aid-type/@vocabulary", "unique"),
-        ("Which aid type vocabularies are being used", "B197", "iati-activity/transaction/aid-type/@vocabulary", "unique"),
+        ("Which default aid type codes are being used", "B196", "iati-activity/default-aid-type/@code", "unique"),
+        ("Which aid type codes are being used", "B197", "iati-activity/transaction/aid-type/@code", "unique"),
     ]
 
     indicator_values = dict()
