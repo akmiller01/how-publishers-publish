@@ -56,9 +56,13 @@ if __name__ == "__main__":
     sheet['A1'] = "Organization: {}".format(args.publisher)
     sheet['A2'] = "AUTOMATIC DATA PULL - {}".format(refresh_date)
 
-    pub_validation = [val for val in all_validation if val['publisher'] == args.publisher]
-    critical_errors = pub_validation[0]["summaryStats"]["critical"]
-    danger_errors = pub_validation[0]["summaryStats"]["danger"]
+    try:
+        pub_validation = [val for val in all_validation if val['publisher'] == args.publisher]
+        critical_errors = pub_validation[0]["summaryStats"]["critical"]
+        danger_errors = pub_validation[0]["summaryStats"]["danger"]
+    except IndexError:
+        critical_errors = ""
+        danger_errors = ""
     
     sheet['B8'] = critical_errors
     sheet['B9'] = danger_errors
@@ -69,13 +73,19 @@ if __name__ == "__main__":
         datastore_fail_validation = json.loads(requests.get(datastore_fail_url).content)
 
         ds_critical_fails = 0
-        for result in datastore_fail_validation["results"]:
-            ds_critical_fails += result["validation_status"]["critical"]
+        try:
+            for result in datastore_fail_validation["results"]:
+                ds_critical_fails += result["validation_status"]["critical"]
+        except KeyError:
+            pass
         sheet['B10'] = ds_critical_fails
 
         datastore_pickup_url = "https://iatidatastore.iatistandard.org/api/datasets/failedpickups/?format=json&publisher_identifier={}".format(org_ref)
         datastore_pickup = json.loads(requests.get(datastore_pickup_url).content)
-        ds_inaccessible = datastore_pickup["count"]
+        try:
+            ds_inaccessible = datastore_pickup["count"]
+        except KeyError:
+            ds_inaccessible = ""
         sheet['B11'] = ds_inaccessible
 
     indicators = [
