@@ -16,8 +16,6 @@ recursive_xpath_constructor = function(xpaths, ns, current_xpath, xml_root, elem
   element_selector = paste0("xsd:element[@name='", element_name, "']")
   element = getNodeSet(xml_root, element_selector)[[1]]
   current_xpath = paste(current_xpath, element_name, sep=ELEMENT_SEP)
-  text_xpath = paste(current_xpath, TEXT_SEL, sep=ELEMENT_SEP)
-  xpaths = c(xpaths, text_xpath)
   possible_children = unlist(getNodeSet(
     doc = element, 
     path = ".//xsd:complexType/xsd:sequence/xsd:element/@ref",
@@ -31,6 +29,10 @@ recursive_xpath_constructor = function(xpaths, ns, current_xpath, xml_root, elem
   for(possible_attribute in possible_attributes){
     attrib_xpath = paste(current_xpath, possible_attribute, sep=ATTRIBUTE_SEP)
     xpaths = c(xpaths, attrib_xpath)
+  }
+  if(length(possible_children) == 0 ){
+    text_xpath = paste(current_xpath, TEXT_SEL, sep=ELEMENT_SEP)
+    xpaths = c(xpaths, text_xpath)
   }
   for(element_name in possible_children){
     xpaths = recursive_xpath_constructor(xpaths, ns, current_xpath, xml_root, element_name)
@@ -49,8 +51,6 @@ ns <- structure(sapply(nsDefs, function(x) x$uri), names = names(nsDefs))
 root_element = getNodeSet(xml_root, "xsd:element[@name='iati-activities']")[[1]]
 root_element_name = 'iati-activities'
 current_xpath = paste(current_xpath, root_element_name, sep=ELEMENT_SEP)
-text_xpath = paste(current_xpath, TEXT_SEL, sep=ELEMENT_SEP)
-xpaths = c(xpaths, text_xpath)
 possible_children = unlist(getNodeSet(
   doc = root_element, 
   path = ".//xsd:complexType/xsd:sequence/xsd:element/@ref",
@@ -69,4 +69,4 @@ for(element_name in possible_children){
   xpaths = recursive_xpath_constructor(xpaths, ns, current_xpath, xml_root, element_name)
 }
 
-writeLines(xpaths,"~/iati_schema_xpaths.txt")
+writeLines(xpaths,"iati_schema_xpaths.txt")
