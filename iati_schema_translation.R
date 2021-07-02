@@ -18,12 +18,12 @@ recursive_xpath_constructor = function(xpaths, ns, current_xpath, xml_root, elem
       element = complex_types[[element_type]]
       possible_children = unlist(getNodeSet(
         doc = element,
-        path = "./xsd:sequence/xsd:element",
+        path = "./xsd:sequence/xsd:element | ./xsd:simpleContent/xsd:extension/xsd:sequence/xsd:element",
         ns
       ))
       possible_attributes = unlist(getNodeSet(
         doc = element,
-        path = "./xsd:attribute/@name",
+        path = "./xsd:attribute/@name | ./xsd:simpleContent/xsd:extension/xsd:attribute/@ref",
         ns
       ))
     }else{
@@ -31,12 +31,12 @@ recursive_xpath_constructor = function(xpaths, ns, current_xpath, xml_root, elem
       element = getNodeSet(xml_root, element_selector)[[1]]
       possible_children = unlist(getNodeSet(
         doc = element,
-        path = "./xsd:complexType/xsd:sequence/xsd:element",
+        path = "./xsd:complexType/xsd:sequence/xsd:element | ./xsd:complexType/xsd:simpleContent/xsd:extension/xsd:sequence/xsd:element",
         ns
       ))
       possible_attributes = unlist(getNodeSet(
         doc = element,
-        path = "./xsd:complexType/xsd:attribute/@name",
+        path = "./xsd:complexType/xsd:attribute/@name | ./xsd:complexType/xsd:simpleContent/xsd:extension/xsd:attribute/@ref",
         ns
       ))
     }
@@ -45,12 +45,12 @@ recursive_xpath_constructor = function(xpaths, ns, current_xpath, xml_root, elem
     element = getNodeSet(xml_root, element_selector)[[1]]
     possible_children = unlist(getNodeSet(
       doc = element,
-      path = "./xsd:complexType/xsd:sequence/xsd:element",
+      path = "./xsd:complexType/xsd:sequence/xsd:element | ./xsd:complexType/xsd:simpleContent/xsd:extension/xsd:sequence/xsd:element",
       ns
     ))
     possible_attributes = unlist(getNodeSet(
       doc = element,
-      path = "./xsd:complexType/xsd:attribute/@name",
+      path = "./xsd:complexType/xsd:attribute/@name | ./xsd:complexType/xsd:simpleContent/xsd:extension/xsd:attribute/@ref",
       ns
     ))
   }
@@ -82,11 +82,11 @@ recursive_xpath_constructor = function(xpaths, ns, current_xpath, xml_root, elem
 current_xpath = ""
 xml_doc = xmlParse(act_schema)
 common_doc = xmlParse(common_schema)
+complex_types = getNodeSet(xmlRoot(common_doc),"xsd:complexType")
+names(complex_types) = getNodeSet(xmlRoot(common_doc),"xsd:complexType/@name")
 xml_root = xmlRoot(xml_doc)
 xml_root = addChildren(xml_root, getNodeSet(xmlRoot(common_doc),"xsd:element"))
 xml_root = addChildren(xml_root, getNodeSet(xmlRoot(common_doc),"xsd:complexType"))
-complex_types = getNodeSet(xmlRoot(common_doc),"xsd:complexType")
-names(complex_types) = getNodeSet(xmlRoot(common_doc),"xsd:complexType/@name")
 
 nsDefs <- xmlNamespaceDefinitions(xml_doc)
 ns <- structure(sapply(nsDefs, function(x) x$uri), names = names(nsDefs))
