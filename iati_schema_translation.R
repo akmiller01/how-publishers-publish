@@ -115,3 +115,15 @@ for(possible_child in possible_children){
 }
 
 writeLines(xpaths,"iati_schema_xpaths.txt")
+
+column_names = xpaths
+column_names = gsub("/iati-activities/","",column_names,fixed=T)
+column_names = gsub("iati-activity/","",column_names,fixed=T)
+column_names = gsub("/text()","",column_names,fixed=T)
+column_names = gsub("/@","/",column_names,fixed=T)
+column_names = gsub("@","",column_names,fixed=T)
+column_names = gsub("/","_",column_names,fixed=T)
+column_names = gsub("-","_",column_names,fixed=T)
+
+map.df = data.frame(column_name=column_names,xpath=xpaths)
+fwrite(map.df,"schema_map.csv")
