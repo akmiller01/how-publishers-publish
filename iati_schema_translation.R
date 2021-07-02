@@ -123,6 +123,7 @@ column_names = gsub("/text()","",column_names,fixed=T)
 column_names = gsub("/@","/",column_names,fixed=T)
 column_names = gsub("@","",column_names,fixed=T)
 column_names = gsub("/","_",column_names,fixed=T)
+column_names = gsub(":","_",column_names,fixed=T)
 column_names = gsub("-","_",column_names,fixed=T)
 
 map.df = data.frame(column_name=column_names,xpath=xpaths)
